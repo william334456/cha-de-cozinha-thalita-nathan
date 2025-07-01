@@ -1,4 +1,24 @@
-let gifts = [
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBBmxU6_SSaVM3vMIl0N2RslnzvGTEtJ8I",
+    authDomain: "cha-de-cozinha-thalita-nathan.firebaseapp.com",
+    databaseURL: "https://cha-de-cozinha-thalita-nathan-default-rtdb.firebaseio.com",
+    projectId: "cha-de-cozinha-thalita-nathan",
+    storageBucket: "cha-de-cozinha-thalita-nathan.firebasestorage.app",
+    messagingSenderId: "92057390557",
+    appId: "1:92057390557:web:86bb3db905e3a0f326ba34"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+let userId = localStorage.getItem("userId");
+if (!userId) {
+    userId = "user_" + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem("userId", userId);
+}
+
+const defaultGifts = [
     "Jogo de talheres", "Conjunto de pratos", "Jogo de copos", "Panela de pressão", "Frigideira antiaderente",
     "Assadeira de vidro", "Escorredor de arroz", "Conjunto de potes herméticos", "Tábua de cortar", "Abridor de garrafas",
     "Ralador", "Escorredor de louça", "Jarra de suco", "Peneira", "Forma de bolo", "Leiteira", "Colher de pau",
@@ -13,72 +33,60 @@ let gifts = [
     "Difusor de ambiente", "Kit organizador de gavetas"
 ];
 
+let allGifts = [];
+
 function loadList() {
-    const list = document.getElementById('gift-list');
-    const reserved = JSON.parse(localStorage.getItem('reservedGifts') || '{}');
-    const mine = JSON.parse(localStorage.getItem('myGifts') || '[]');
-    list.innerHTML = '';
+    const list = document.getElementById("gift-list");
+    db.ref("gifts").once("value", (snapshot) => {
+        const data = snapshot.val() || {};
+        allGifts = Object.keys(data).length ? Object.keys(data) : defaultGifts;
 
-    const allGifts = [...gifts, ...mine.filter(g => !gifts.includes(g))];
+        list.innerHTML = "";
+        allGifts.forEach((gift) => {
+            const li = document.createElement("li");
+            const info = data[gift] || {};
+            li.textContent = gift;
 
-    allGifts.forEach((gift) => {
-        const li = document.createElement('li');
-        li.textContent = gift;
-
-        if (reserved[gift]) {
-            if (mine.includes(gift)) {
-                li.classList.add('reserved');
-                li.innerHTML = `${gift} <button onclick="unreserveGift('${gift}')">Cancelar reserva</button>`;
+            if (info.reservadoPor) {
+                li.classList.add("reserved");
+                if (info.reservadoPor === userId) {
+                    li.innerHTML = gift + ' <button onclick="unreserveGift(\'' + gift + '\')">Cancelar reserva</button>';
+                } else {
+                    li.innerHTML = gift + ' <button disabled>Reservado</button>';
+                }
             } else {
-                li.classList.add('reserved');
-                li.innerHTML = `${gift} <button disabled>Reservado</button>`;
+                const btn = document.createElement("button");
+                btn.textContent = "Quero dar esse presente";
+                btn.onclick = () => reserveGift(gift);
+                li.appendChild(btn);
             }
-        } else {
-            const btn = document.createElement('button');
-            btn.textContent = "Quero dar esse presente";
-            btn.onclick = () => reserveGift(gift);
-            li.appendChild(btn);
-        }
 
-        list.appendChild(li);
+            list.appendChild(li);
+        });
     });
 }
 
 function reserveGift(gift) {
-    const reserved = JSON.parse(localStorage.getItem('reservedGifts') || '{}');
-    const mine = JSON.parse(localStorage.getItem('myGifts') || '[]');
-
-    reserved[gift] = true;
-    mine.push(gift);
-
-    localStorage.setItem('reservedGifts', JSON.stringify(reserved));
-    localStorage.setItem('myGifts', JSON.stringify(mine));
-    loadList();
+    db.ref("gifts/" + gift).set({ reservadoPor: userId }).then(loadList);
 }
 
 function unreserveGift(gift) {
-    const reserved = JSON.parse(localStorage.getItem('reservedGifts') || '{}');
-    let mine = JSON.parse(localStorage.getItem('myGifts') || '[]');
-
-    delete reserved[gift];
-    mine = mine.filter(g => g !== gift);
-
-    localStorage.setItem('reservedGifts', JSON.stringify(reserved));
-    localStorage.setItem('myGifts', JSON.stringify(mine));
-    loadList();
+    db.ref("gifts/" + gift).once("value", (snapshot) => {
+        const info = snapshot.val();
+        if (info.reservadoPor === userId) {
+            db.ref("gifts/" + gift).remove().then(loadList);
+        }
+    });
 }
 
 function addCustomGift() {
-    const input = document.getElementById('customGiftInput');
+    const input = document.getElementById("customGiftInput");
     const gift = input.value.trim();
-    if (gift === '') return;
-
-    if (!gifts.includes(gift)) {
-        gifts.push(gift);
-    }
-
-    reserveGift(gift);
-    input.value = '';
+    if (gift === "") return;
+    db.ref("gifts/" + gift).set({ reservadoPor: userId }).then(() => {
+        input.value = "";
+        loadList();
+    });
 }
 
 window.onload = loadList;
