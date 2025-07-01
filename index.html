@@ -1,26 +1,28 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lista de Presentes</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Chá de Cozinha - Thalita & Nathan</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
 </head>
 <body>
-  <h1>Lista de Presentes</h1>
+    <div class="container">
+        <h1>Chá de Cozinha <span>Thalita & Nathan</span></h1>
+        <p>Escolha com carinho um presente que gostaria de nos dar!
+Ao escrever o presente e confirmar, ele aparecerá na lista para que os outros convidados saibam que já foi escolhido.
+Se mudar de ideia, você pode cancelar o presente depois.
+Obrigado por fazer parte desse momento tão especial da nossa vida! 💕</p>
 
-  <div class="form-container">
-    <input type="text" id="customGiftInput" placeholder="Digite o presente que deseja dar">
-    <button id="addGiftBtn">Confirmar Presente</button>
-  </div>
+        <ul id="gift-list"></ul>
 
-  <ul id="gift-list"></ul>
-
-  <button id="adminModeBtn">Modo Administrador</button>
-
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <script src="script.js"></script>
+        <div class="custom-gift">
+            <h3>Presente escolhido</h3>
+            <input type="text" id="customGiftInput" placeholder="Digite seu presente">
+            <button onclick="addCustomGift()">Quero dar este presente</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
