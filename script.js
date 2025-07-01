@@ -11,6 +11,13 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+// Gera ou recupera um ID único para o convidado
+let guestId = localStorage.getItem('guestId');
+if (!guestId) {
+    guestId = crypto.randomUUID();
+    localStorage.setItem('guestId', guestId);
+}
+
 function addCustomGift() {
     const input = document.getElementById('customGiftInput');
     const gift = input.value.trim();
@@ -19,10 +26,15 @@ function addCustomGift() {
     const giftRef = db.ref('gifts').push();
     giftRef.set({
         name: gift,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        owner: guestId
     });
 
     input.value = '';
+}
+
+function removeGift(key) {
+    db.ref('gifts/' + key).remove();
 }
 
 function loadGifts() {
@@ -31,10 +43,19 @@ function loadGifts() {
         list.innerHTML = '';
         const gifts = snapshot.val();
         if (gifts) {
-            Object.values(gifts).forEach(gift => {
+            Object.entries(gifts).forEach(([key, gift]) => {
                 const li = document.createElement('li');
                 li.textContent = gift.name;
                 li.classList.add('reserved');
+
+                // Se o dono for o mesmo convidado, permite remover
+                if (gift.owner === guestId) {
+                    const btn = document.createElement('button');
+                    btn.textContent = "Cancelar presente";
+                    btn.onclick = () => removeGift(key);
+                    li.appendChild(btn);
+                }
+
                 list.appendChild(li);
             });
         }
