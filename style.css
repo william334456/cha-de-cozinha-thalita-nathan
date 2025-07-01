@@ -175,3 +175,46 @@ input {
         margin-top: 8px;
     }
 }
+
+
+@media (max-width: 480px) {
+    .custom-gift {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .custom-gift input,
+    .custom-gift button {
+        width: 100%;
+        max-width: 100%;
+        font-size: 1.1em;
+    }
+
+    .custom-gift button {
+        margin-top: 10px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    h1 span {
+        font-size: 1.3em;
+    }
+
+    p {
+        font-size: 1.05em;
+    }
+
+    li {
+        font-size: 1.1em;
+        padding: 16px 14px;
+    }
+
+    li button {
+        font-size: 1.05em;
+        padding: 12px;
+    }
+}
+
