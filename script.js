@@ -16,8 +16,13 @@ let isAdmin = false;
 let currentUser = localStorage.getItem("userName") || "";
 
 if (!currentUser) {
-    currentUser = prompt("Digite seu nome para reservar presentes:\n(Não se preocupe, seu nome não será visível para os outros convidados)");
-    localStorage.setItem("userName", currentUser);
+    currentUser = prompt("Digite seu nome para confirmar o presente que deseja dar:\n(Não se preocupe, seu nome não será visível para os outros convidados)");
+    if (currentUser) {
+        localStorage.setItem("userName", currentUser);
+    } else {
+        alert("É necessário informar um nome.");
+        location.reload();
+    }
 }
 
 function promptAdmin() {
@@ -25,10 +30,25 @@ function promptAdmin() {
     if (senha === "admin123") {
         isAdmin = true;
         alert("Modo administrador ativado!");
-        loadGifts(); // recarrega com opções de cancelamento
+        loadGifts();
     } else {
         alert("Senha incorreta!");
     }
+}
+
+function addGift() {
+    const input = document.getElementById("customGiftInput");
+    const gift = input.value.trim();
+    if (gift === "") return;
+
+    const giftRef = db.ref("gifts").push();
+    giftRef.set({
+        name: gift,
+        reservedBy: currentUser,
+        timestamp: Date.now()
+    });
+
+    input.value = "";
 }
 
 function loadGifts() {
@@ -39,15 +59,9 @@ function loadGifts() {
         if (gifts) {
             Object.entries(gifts).forEach(([key, gift]) => {
                 const li = document.createElement("li");
-                li.textContent = gift.name;
-                li.classList.add(gift.reservedBy ? "reserved" : "available");
+                li.textContent = "🎁 " + gift.name;
 
-                if (!gift.reservedBy) {
-                    const reserveBtn = document.createElement("button");
-                    reserveBtn.textContent = "Reservar";
-                    reserveBtn.onclick = () => reserveGift(key);
-                    li.appendChild(reserveBtn);
-                } else if (gift.reservedBy === currentUser || isAdmin) {
+                if (gift.reservedBy === currentUser || isAdmin) {
                     const cancelBtn = document.createElement("button");
                     cancelBtn.textContent = "Cancelar";
                     cancelBtn.onclick = () => cancelGift(key);
@@ -60,34 +74,12 @@ function loadGifts() {
     });
 }
 
-function reserveGift(key) {
-    db.ref("gifts/" + key).update({
-        reservedBy: currentUser
-    });
-}
-
 function cancelGift(key) {
-    db.ref("gifts/" + key).update({
-        reservedBy: null
-    });
-}
-
-function addCustomGift() {
-    const input = document.getElementById("customGiftInput");
-    const gift = input.value.trim();
-    if (gift === "") return;
-
-    const giftRef = db.ref("gifts").push();
-    giftRef.set({
-        name: gift,
-        reservedBy: null,
-        timestamp: Date.now()
-    });
-
-    input.value = "";
+    db.ref("gifts/" + key).remove();
 }
 
 window.onload = () => {
     loadGifts();
     document.getElementById("adminModeBtn").onclick = promptAdmin;
+    document.getElementById("addGiftBtn").onclick = addGift;
 };
