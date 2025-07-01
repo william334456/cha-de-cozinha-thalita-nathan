@@ -127,3 +127,51 @@ input {
         margin-top: 8px;
     }
 }
+
+
+/* Refinamento específico para telas pequenas */
+@media (max-width: 480px) {
+    body {
+        padding: 0 1em;
+    }
+
+    h1 {
+        font-size: 1.6em;
+    }
+
+    h1 span {
+        font-size: 1.1em;
+    }
+
+    p {
+        font-size: 1em;
+    }
+
+    .custom-gift h3 {
+        font-size: 1.1em;
+    }
+
+    input {
+        font-size: 1em;
+        padding: 12px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    button {
+        font-size: 1em;
+        padding: 12px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    li button {
+        width: 100%;
+        margin-top: 8px;
+    }
+}
