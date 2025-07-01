@@ -1,3 +1,4 @@
+
 body {
     font-family: 'Segoe UI', sans-serif;
     background: #fdfdfd;
@@ -8,12 +9,11 @@ body {
 .container {
     max-width: 700px;
     margin: auto;
-    padding: 1.5em;
+    padding: 2em;
 }
 h1 {
     text-align: center;
     color: #b45f9e;
-    font-size: 1.8em;
 }
 h1 span {
     display: block;
@@ -32,7 +32,6 @@ li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
 }
 li.reserved {
     background: #eee;
@@ -43,10 +42,9 @@ button {
     background: #b45f9e;
     color: #fff;
     border: none;
-    padding: 8px 14px;
+    padding: 6px 12px;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 5px;
 }
 button:disabled {
     background: #aaa;
@@ -56,21 +54,7 @@ button:disabled {
     text-align: center;
 }
 input {
-    padding: 10px;
-    width: 70%;
+    padding: 8px;
+    width: 60%;
     margin-right: 10px;
-    max-width: 300px;
-}
-
-@media (max-width: 600px) {
-    body {
-        font-size: 18px;
-    }
-    input {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-    button {
-        width: 100%;
-    }
 }
