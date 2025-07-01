@@ -147,3 +147,47 @@ input {
         margin-top: 10px;
     }
 }
+
+
+@media (max-width: 600px) {
+    html {
+        font-size: 18px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h1 span {
+        font-size: 1.5rem;
+    }
+
+    p {
+        font-size: 1.2rem;
+        line-height: 1.8;
+    }
+
+    .custom-gift h3 {
+        font-size: 1.4rem;
+    }
+
+    input {
+        font-size: 1.2rem;
+        padding: 16px;
+    }
+
+    button {
+        font-size: 1.2rem;
+        padding: 16px;
+    }
+
+    li {
+        font-size: 1.2rem;
+        padding: 16px 18px;
+    }
+
+    li button {
+        font-size: 1.2rem;
+        padding: 14px;
+    }
+}
