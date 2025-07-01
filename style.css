@@ -1,4 +1,5 @@
 
+
 body {
     font-family: 'Segoe UI', sans-serif;
     background: #fdfdfd;
@@ -74,7 +75,6 @@ button:disabled {
 }
 
 input {
-    height: 50px;
     padding: 10px;
     width: 70%;
     max-width: 300px;
@@ -89,7 +89,6 @@ input {
     }
 
     input {
-    height: 50px;
         width: 100%;
     }
 
