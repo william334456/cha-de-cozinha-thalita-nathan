@@ -9,7 +9,7 @@ body {
 .container {
     max-width: 700px;
     margin: auto;
-    padding: 2em;
+    padding: 2em 1em;
 }
 h1 {
     text-align: center;
@@ -19,6 +19,15 @@ h1 span {
     display: block;
     font-size: 1.2em;
     color: #555;
+}
+.intro p {
+    background: #fff0f8;
+    border: 1px solid #f0cbe2;
+    padding: 1em;
+    border-radius: 8px;
+    font-size: 1em;
+    line-height: 1.6;
+    margin-bottom: 1.5em;
 }
 ul {
     list-style: none;
@@ -32,6 +41,7 @@ li {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
 }
 li.reserved {
     background: #eee;
@@ -45,6 +55,7 @@ button {
     padding: 6px 12px;
     border-radius: 4px;
     cursor: pointer;
+    margin-top: 8px;
 }
 button:disabled {
     background: #aaa;
@@ -55,6 +66,15 @@ button:disabled {
 }
 input {
     padding: 8px;
-    width: 60%;
-    margin-right: 10px;
+    width: 80%;
+    max-width: 400px;
+    margin-bottom: 10px;
+}
+@media (max-width: 480px) {
+    input {
+        width: 100%;
+    }
+    button {
+        width: 100%;
+    }
 }
